@@ -1,23 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
-  
+import Main from './component/main';
+import ImportView from './component/import';
+
+import React, {useEffect, useState} from "react";
+
 function App() {
+  const [showImportView,setShowImportView] = React.useState(true)
+  const [mailGroups,setMailgroups] = React.useState()
+  const [selectedMailGroups,setSelectedMailGroups] = React.useState([])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Reacttetrd jkllkfda jkljklj
-        </a>
-      </header>
+      {showImportView && (
+      <ImportView
+        showImportView={showImportView}
+        setShowImportView={setShowImportView}
+        mailGroups={mailGroups}
+        setMailgroups={setMailgroups}
+        selectedMailGroups={selectedMailGroups}
+        setSelectedMailGroups={setSelectedMailGroups}
+      />
+      )}
+      <Main
+        showImportView={showImportView}
+        setShowImportView={setShowImportView}
+        mailGroups={mailGroups}
+        setMailgroups={setMailgroups}
+      />
     </div>
   );
 }
