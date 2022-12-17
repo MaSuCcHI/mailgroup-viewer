@@ -1,0 +1,10 @@
+group,user
+gA@test.com,gB@test.com
+gA@test.com,u1@test.com
+gA@test.com,u2@test.com
+gB@test.com,u4@test.com
+gB@test.com,u1@test.com
+gC@test.com,u3@test.com
+gC@test.com,gA@test.com
+gD@test.com,gA@test.com
+gE@test.com,gD@test.com

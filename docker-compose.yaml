@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  react-app:
+    build: ./
+    container_name: mailgroup-viewer-react-app
+    volumes:
+      - ./app/src:/workspaces/app/src
+    ports:
+      - 3000:3000
+    tty: true
+    stdin_open: true
+    command: sh -c "cd /workspaces/app  && npm start"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
