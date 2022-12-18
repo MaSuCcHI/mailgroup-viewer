@@ -162,11 +162,14 @@ export default function Main({
                 setSelectedMailGroups={setSelectedMailGroups}
             />
         </div>
-        <TextField
-            id="outlined-basic" label="Outlined" variant="outlined" 
-            color="success"
-            sx={{ minWidth:300, position:"absolute", bottom:"10px", right:"20px"}}
-        />
+        <div style={{ background:"gainsboro",minWidth:300, minHeight:60, position:"absolute", bottom:"10px", right:"20px" }}>
+            <TextField
+                id="filled-basic" label="検索" variant="filled" 
+                select
+                sx={{width:"100%"}}
+            />
+        </div>
+        
 
     </div>
     )
