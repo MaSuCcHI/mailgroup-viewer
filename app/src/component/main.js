@@ -1,6 +1,11 @@
 import styles from './main.css'
+import DetailInfoCard from './detailCard.js';
 
 import React, {useEffect, useState} from "react";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -42,7 +47,17 @@ export default function Main({
         // node.setPosition(x,y)
         node.registerListener({
             selectionChanged: (event) => {
-                console.log("selected:",node.id)
+                // console.log("selected:",node.id)
+                // console.log(event)
+                let tmpSelectedMailGroups = new Set(selectedMailGroups)
+                if(event.isSelected){
+                    tmpSelectedMailGroups.add(node.id)
+                    console.log(tmpSelectedMailGroups)
+                }else{
+                    tmpSelectedMailGroups.delete(node.id)
+                    console.log(tmpSelectedMailGroups)
+                }
+                setSelectedMailGroups(tmpSelectedMailGroups)
             }
         })
         node.addInPort(" ")
@@ -135,11 +150,24 @@ export default function Main({
         })
 
         engin.setModel(model)
-    },[mailGroups,selectedMailGroups])
+    },[mailGroups])
     
     return (
     <div className="Main">
         <CanvasWidget className='diagram' engine={engin}/>
+        <div style={{ minWidth:300,position:"absolute", bottom:"80px",right:"20px" }}>
+            <DetailInfoCard
+                mailGroups={mailGroups}
+                selectedMailGroups={selectedMailGroups}
+                setSelectedMailGroups={setSelectedMailGroups}
+            />
+        </div>
+        <TextField
+            id="outlined-basic" label="Outlined" variant="outlined" 
+            color="success"
+            sx={{ minWidth:300, position:"absolute", bottom:"10px", right:"20px"}}
+        />
+
     </div>
     )
 

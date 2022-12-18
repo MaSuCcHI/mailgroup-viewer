@@ -8,7 +8,7 @@ import React, {useEffect, useState} from "react";
 function App() {
   const [showImportView,setShowImportView] = React.useState(true)
   const [mailGroups,setMailgroups] = React.useState()
-  const [selectedMailGroups,setSelectedMailGroups] = React.useState([])
+  const [selectedMailGroups,setSelectedMailGroups] = React.useState(new Set())
 
   return (
     <div className="App">
@@ -27,6 +27,8 @@ function App() {
         setShowImportView={setShowImportView}
         mailGroups={mailGroups}
         setMailgroups={setMailgroups}
+        selectedMailGroups={selectedMailGroups}
+        setSelectedMailGroups={setSelectedMailGroups}
       />
     </div>
   );
