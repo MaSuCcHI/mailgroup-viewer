@@ -11,8 +11,28 @@ export default function ImportView({
 }){
     Modal.setAppElement(document.getElementById('root'))
 
+    // rootを０として入れ子構造の深さを計算（最大深度）
+    function setMailgroupDepth(targetMailGroupName,depth,mailGroups){
+        const mailGroup = mailGroups.get(targetMailGroupName)
+        const children = mailGroup.children
+        mailGroup.depth = mailGroup.depth < depth ? depth : mailGroup.depth
+        children.forEach(child => {
+            setMailgroupDepth(child,mailGroup.depth+1,mailGroups)
+        })
+    }
+
+    function parseMailGroupsDepth(mailGroups){
+        const rootMailGroups = Array.from(mailGroups)
+            .filter((elem)=>{ return(elem[1].parents.length === 0) })
+            .map(elem => { return(elem[0]) })
+        rootMailGroups.forEach(value => {
+            setMailgroupDepth(value,0,mailGroups)
+        }) 
+    }
+
+    // メールグループの親子関係をパース
     const parseMailGroups = (rawData) => {
-        // console.log(rawData)
+        console.log(rawData)
         const tmpMailGroups = new Map()
         rawData.forEach((elem,index)=> {
             if(index===0){return}
@@ -23,7 +43,7 @@ export default function ImportView({
             if (!tmpMailGroups.has(targetMailgroup)){
                 const parents = []
                 const children = []
-                tmpMailGroups.set(targetMailgroup,{"parents":parents,"children":children})
+                tmpMailGroups.set(targetMailgroup,{"parents":parents,"children":children,"depth":0})
             }
             const children = tmpMailGroups.get(targetMailgroup).children
             children.push(childMail)
@@ -31,12 +51,11 @@ export default function ImportView({
             if(!tmpMailGroups.has(childMail)){
                 const parents = [] 
                 const children = []
-                tmpMailGroups.set(childMail,{"parents":parents,"children":children})
+                tmpMailGroups.set(childMail,{"parents":parents,"children":children,"depth":0})
             }
             const parents = tmpMailGroups.get(childMail).parents
             parents.push(targetMailgroup)
         });
-        // console.log(tmpMailGroups)
         return tmpMailGroups
     }
 
@@ -48,6 +67,8 @@ export default function ImportView({
         reader.onload = () => {
             const result = Papa.parse(reader.result)
             const mailGroups = parseMailGroups(result.data)
+            parseMailGroupsDepth(mailGroups)
+            console.log(mailGroups)
             setMailgroups(mailGroups)
         }
     }
