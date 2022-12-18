@@ -1,6 +1,11 @@
 import styles from './main.css'
+import DetailInfoCard from './detailCard.js';
 
 import React, {useEffect, useState} from "react";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,7 +15,7 @@ import createEngine, {
     DefaultNodeModel,
     DefaultLinkModel,
 } from "@projectstorm/react-diagrams"
-import { requirePropFactory } from '@mui/material';
+import { Autocomplete, requirePropFactory } from '@mui/material';
 
 const engin = createEngine()
 let model = new DiagramModel()
@@ -27,6 +32,8 @@ export default function Main({
 }) {
     let rootMailGroups = []
     let userMails = []
+    let groupMails = []
+    let options = []
 
     function addNode(targetMailGroupName,isRoot=false) {
         const targetMailGroup = mailGroups.get(targetMailGroupName)
@@ -42,7 +49,17 @@ export default function Main({
         // node.setPosition(x,y)
         node.registerListener({
             selectionChanged: (event) => {
-                console.log("selected:",node.id)
+                // console.log("selected:",node.id)
+                // console.log(event)
+                let tmpSelectedMailGroups = new Set(selectedMailGroups)
+                if(event.isSelected){
+                    tmpSelectedMailGroups.add(node.id)
+                    console.log(tmpSelectedMailGroups)
+                }else{
+                    tmpSelectedMailGroups.delete(node.id)
+                    console.log(tmpSelectedMailGroups)
+                }
+                setSelectedMailGroups(tmpSelectedMailGroups)
             }
         })
         node.addInPort(" ")
@@ -121,12 +138,15 @@ export default function Main({
         nodes = new Map()
         if (mailGroups === undefined) { return }
         rootMailGroups = Array.from(mailGroups)
-            .filter((elem)=>{ return(elem[1].parents.length === 0) })
+            .filter(elem => { return(elem[1].parents.length === 0) })
             .map(elem => { return(elem[0]) })
         userMails = Array.from(mailGroups)
-            .filter((elem)=>{ return(elem[1].children.length === 0) })
+            .filter(elem => { return(elem[1].children.length === 0) })
             .map(elem => { return(elem[0]) })
-        // console.log(userMails)
+        groupMails = Array.from(mailGroups)
+            .filter(elem => { return(elem[1].children.length !== 0) })
+            .map(elem => { return(elem[0]) })  
+        console.log(options)
 
         rootMailGroups.forEach((rootMailGroup)=>{
             if(!userMails.includes(rootMailGroup)){
@@ -135,11 +155,27 @@ export default function Main({
         })
 
         engin.setModel(model)
-    },[mailGroups,selectedMailGroups])
+    },[mailGroups])
     
+    options = groupMails.map(mail => {return({label : mail})})  
     return (
     <div className="Main">
         <CanvasWidget className='diagram' engine={engin}/>
+        <div style={{ minWidth:300,position:"absolute", bottom:"80px",right:"20px" }}>
+            <DetailInfoCard
+                mailGroups={mailGroups}
+                selectedMailGroups={selectedMailGroups}
+                setSelectedMailGroups={setSelectedMailGroups}
+            />
+        </div>
+        <div style={{ background:"gainsboro",minWidth:300, minHeight:60, position:"absolute", bottom:"10px", right:"20px" }}>
+            <Autocomplete
+               options={options} 
+               renderInput={(params)=> <TextField {...params} label="検索"/>}
+            />
+        </div>
+        
+
     </div>
     )
 
