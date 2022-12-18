@@ -2,6 +2,8 @@ import styles from './main.css'
 
 import React, {useEffect, useState} from "react";
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
 import createEngine, {
     DiagramModel,
@@ -30,7 +32,7 @@ export default function Main({
         const targetMailGroup = mailGroups.get(targetMailGroupName)
         const isUser = userMails.includes(targetMailGroupName) 
         if(nodes.get(targetMailGroupName) !== undefined){ return }
-        // if(isUser){ return }
+        if(isUser){ return }
 
         const node = new DefaultNodeModel({
             name: isUser ? "ユーザーアドレス" : targetMailGroupName,
