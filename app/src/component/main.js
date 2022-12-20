@@ -1,5 +1,6 @@
 import styles from './main.css'
 import DetailInfoCard from './detailCard.js';
+import SearchTextField from './searchField';
 
 import React, {useEffect, useState} from "react";
 import Card from '@mui/material/Card';
@@ -33,7 +34,6 @@ export default function Main({
     let rootMailGroups = []
     let userMails = []
     let groupMails = []
-    let options = []
 
     function addNode(targetMailGroupName,isRoot=false) {
         const targetMailGroup = mailGroups.get(targetMailGroupName)
@@ -136,7 +136,7 @@ export default function Main({
         console.log("useEffect")
         model = new DiagramModel()
         nodes = new Map()
-        if (mailGroups === undefined) { return }
+        if (mailGroups === undefined){ return }
         rootMailGroups = Array.from(mailGroups)
             .filter(elem => { return(elem[1].parents.length === 0) })
             .map(elem => { return(elem[0]) })
@@ -146,18 +146,26 @@ export default function Main({
         groupMails = Array.from(mailGroups)
             .filter(elem => { return(elem[1].children.length !== 0) })
             .map(elem => { return(elem[0]) })  
-        console.log(options)
 
-        rootMailGroups.forEach((rootMailGroup)=>{
-            if(!userMails.includes(rootMailGroup)){
-                createNodeTree(rootMailGroup)
-            }
-        })
+        // rootMailGroups.forEach((rootMailGroup)=>{
+        //     if(!userMails.includes(rootMailGroup)){
+        //         createNodeTree(rootMailGroup)
+        //     }
+        // })
+        const selectedMailGroupName = Array.from(selectedMailGroups)[0]
+        console.log(selectedMailGroupName)
+        if (selectedMailGroupName !== undefined){
+            const ancenstorMailgroups = mailGroups.get(selectedMailGroupName).ancenstorMailgroups
+            ancenstorMailgroups.forEach((ancenstorMailgroup)=>{
+                if(!userMails.includes(ancenstorMailgroup)){
+                    createNodeTree(ancenstorMailgroup)
+                }
+            })
+        }
 
         engin.setModel(model)
-    },[mailGroups])
+    },[mailGroups,selectedMailGroups])
     
-    options = groupMails.map(mail => {return({label : mail})})  
     return (
     <div className="Main">
         <CanvasWidget className='diagram' engine={engin}/>
@@ -169,10 +177,12 @@ export default function Main({
             />
         </div>
         <div style={{ background:"gainsboro",minWidth:300, minHeight:60, position:"absolute", bottom:"10px", right:"20px" }}>
-            <Autocomplete
-               options={options} 
-               renderInput={(params)=> <TextField {...params} label="検索"/>}
-            />
+            <SearchTextField
+                mailGroups={mailGroups}
+                setMailgroups={setMailgroups}
+                selectedMailGroups={selectedMailGroups}
+                setSelectedMailGroups={setSelectedMailGroups}
+            /> 
         </div>
         
 

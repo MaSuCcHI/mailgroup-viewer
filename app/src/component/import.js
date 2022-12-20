@@ -12,12 +12,13 @@ export default function ImportView({
     Modal.setAppElement(document.getElementById('root'))
 
     // rootを０として入れ子構造の深さを計算（最大深度）
-    function setMailgroupDepth(targetMailGroupName,depth,mailGroups){
+    function setMailgroupDepth(targetMailGroupName,depth,mailGroups,ancenstorMailgroupName){
         const mailGroup = mailGroups.get(targetMailGroupName)
         const children = mailGroup.children
         mailGroup.depth = mailGroup.depth < depth ? depth : mailGroup.depth
+        mailGroup.ancenstorMailgroups.push(ancenstorMailgroupName)
         children.forEach(child => {
-            setMailgroupDepth(child,mailGroup.depth+1,mailGroups)
+            setMailgroupDepth(child,mailGroup.depth+1,mailGroups,ancenstorMailgroupName)
         })
     }
 
@@ -26,7 +27,7 @@ export default function ImportView({
             .filter((elem)=>{ return(elem[1].parents.length === 0) })
             .map(elem => { return(elem[0]) })
         rootMailGroups.forEach(value => {
-            setMailgroupDepth(value,0,mailGroups)
+            setMailgroupDepth(value,0,mailGroups,value)
         }) 
     }
 
@@ -43,7 +44,7 @@ export default function ImportView({
             if (!tmpMailGroups.has(targetMailgroup)){
                 const parents = []
                 const children = []
-                tmpMailGroups.set(targetMailgroup,{"parents":parents,"children":children,"depth":0})
+                tmpMailGroups.set(targetMailgroup,{"parents":parents,"children":children,"depth":0,"ancenstorMailgroups":[]})
             }
             const children = tmpMailGroups.get(targetMailgroup).children
             children.push(childMail)
@@ -51,7 +52,7 @@ export default function ImportView({
             if(!tmpMailGroups.has(childMail)){
                 const parents = [] 
                 const children = []
-                tmpMailGroups.set(childMail,{"parents":parents,"children":children,"depth":0})
+                tmpMailGroups.set(childMail,{"parents":parents,"children":children,"depth":0,"ancenstorMailgroups":[]})
             }
             const parents = tmpMailGroups.get(childMail).parents
             parents.push(targetMailgroup)
