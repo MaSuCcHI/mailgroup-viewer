@@ -29,7 +29,9 @@ export default function Main({
     mailGroups,
     setMailgroups,
     selectedMailGroups,
-    setSelectedMailGroups
+    setSelectedMailGroups,
+    searchedMailGroup,
+    setSearchedMailGroup
 }) {
     let rootMailGroups = []
     let userMails = []
@@ -152,10 +154,11 @@ export default function Main({
         //         createNodeTree(rootMailGroup)
         //     }
         // })
-        const selectedMailGroupName = Array.from(selectedMailGroups)[0]
-        console.log(selectedMailGroupName)
-        if (selectedMailGroupName !== undefined){
-            const ancenstorMailgroups = mailGroups.get(selectedMailGroupName).ancenstorMailgroups
+        // const selectedMailGroupName = Array.from(selectedMailGroups)[0]
+        // console.log(selectedMailGroupName)
+        if (searchedMailGroup!==""){
+            console.log(searchedMailGroup)
+            const ancenstorMailgroups = mailGroups.get(searchedMailGroup).ancenstorMailgroups
             ancenstorMailgroups.forEach((ancenstorMailgroup)=>{
                 if(!userMails.includes(ancenstorMailgroup)){
                     createNodeTree(ancenstorMailgroup)
@@ -164,7 +167,7 @@ export default function Main({
         }
 
         engin.setModel(model)
-    },[mailGroups,selectedMailGroups])
+    },[mailGroups,searchedMailGroup])
     
     return (
     <div className="Main">
@@ -182,6 +185,8 @@ export default function Main({
                 setMailgroups={setMailgroups}
                 selectedMailGroups={selectedMailGroups}
                 setSelectedMailGroups={setSelectedMailGroups}
+                searchedMailGroup={searchedMailGroup}
+                setSearchedMailGroup={setSearchedMailGroup}
             /> 
         </div>
         

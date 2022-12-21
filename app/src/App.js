@@ -9,6 +9,7 @@ function App() {
   const [showImportView,setShowImportView] = React.useState(true)
   const [mailGroups,setMailgroups] = React.useState()
   const [selectedMailGroups,setSelectedMailGroups] = React.useState(new Set())
+  const [searchedMailGroup,setSearchedMailGroup] = React.useState("")
 
   return (
     <div className="App">
@@ -29,6 +30,8 @@ function App() {
         setMailgroups={setMailgroups}
         selectedMailGroups={selectedMailGroups}
         setSelectedMailGroups={setSelectedMailGroups}
+        searchedMailGroup={searchedMailGroup}
+        setSearchedMailGroup={setSearchedMailGroup}
       />
     </div>
   );

@@ -5,7 +5,9 @@ export default function SearchTextField({
     mailGroups,
     setMailgroups,
     selectedMailGroups,
-    setSelectedMailGroups
+    setSelectedMailGroups,
+    searchedMailGroup,
+    setSearchedMailGroup
 }) {
     let options = mailGroups === undefined ? [] : Array.from(mailGroups.keys())
     useEffect(() => {
@@ -20,9 +22,10 @@ export default function SearchTextField({
             options={options}
             renderInput={(params)=><TextField {...params} label="検索"/>}
             onChange={(event,value)=>{
-                let tmpSelectedMailGroups = new Set()
-                tmpSelectedMailGroups.add(value)
-                setSelectedMailGroups(tmpSelectedMailGroups)
+                // let tmpSelectedMailGroups = new Set()
+                // tmpSelectedMailGroups.add(value)
+                // setSelectedMailGroups(tmpSelectedMailGroups)
+                setSearchedMailGroup(value)
             }}
             onOpen={(event,value)=>{
 
