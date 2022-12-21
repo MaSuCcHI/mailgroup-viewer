@@ -181,6 +181,7 @@ export default function Main({
         </div>
         <div style={{ background:"gainsboro",minWidth:300, minHeight:60, position:"absolute", bottom:"10px", right:"20px" }}>
             <SearchTextField
+                model={model}
                 mailGroups={mailGroups}
                 setMailgroups={setMailgroups}
                 selectedMailGroups={selectedMailGroups}

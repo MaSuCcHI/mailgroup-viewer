@@ -2,6 +2,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { useEffect,useState } from "react";
 
 export default function SearchTextField({
+    model,
     mailGroups,
     setMailgroups,
     selectedMailGroups,
@@ -25,13 +26,15 @@ export default function SearchTextField({
                 // let tmpSelectedMailGroups = new Set()
                 // tmpSelectedMailGroups.add(value)
                 // setSelectedMailGroups(tmpSelectedMailGroups)
-                setSearchedMailGroup(value)
+                if(mailGroups.get(value)!==undefined){
+                    setSearchedMailGroup(value)
+                }
             }}
             onOpen={(event,value)=>{
-
+                model.setLocked(true) 
             }}
             onClose={(event,value)=>{
-
+                model.setLocked(false)
             }}
         />
     )
