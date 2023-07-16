@@ -41,11 +41,11 @@ export default function Main({
         const targetMailGroup = mailGroups.get(targetMailGroupName)
         const isUser = userMails.includes(targetMailGroupName) 
         if(nodes.get(targetMailGroupName) !== undefined){ return }
-        if(isUser){ return }
+        if(isUser && searchedMailGroup !== targetMailGroupName){ return }
 
         const node = new DefaultNodeModel({
-            name: isUser ? "ユーザーアドレス" : targetMailGroupName,
-            color: !isUser ? "rgba(192, 0, 25, 0.2)" :  "rgba(0, 192, 255, 0.2)"
+            name: targetMailGroupName,
+            color: !(searchedMailGroup === targetMailGroupName) ? "rgba(192, 0, 25, 0.2)" :  "rgba(0, 192, 255, 0.2)"
         })
         node.id = targetMailGroupName
         // node.setPosition(x,y)
